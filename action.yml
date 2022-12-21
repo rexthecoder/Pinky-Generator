@@ -1,5 +1,5 @@
-name: 'Pinky Flutter'
-description: 'Flutter git action that makes you do more'
+name: 'Pinky Generator'
+description: 'Generator for Flutter Pinky github action'
 inputs:
   path:
     description: 'Path to file'
