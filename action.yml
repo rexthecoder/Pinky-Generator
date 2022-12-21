@@ -1,5 +1,9 @@
 name: 'Pinky Generator'
 description: 'Generator for Flutter Pinky github action'
+branding:
+  icon: 'git-merge'
+  color: 'white'
+  
 inputs:
   path:
     description: 'Path to file'
