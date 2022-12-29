@@ -1,10 +1,12 @@
 const core = require('@actions/core');
+const get = require('@actions/github');
 const FormData = require('form-data');
 const telegram = require('./utilities/telegram_bot');
 const slack = require('./utilities/slack_bot');
 const discord = require('./utilities/discord_bot');
 var fs = require('fs');
-const zlib = require('zlib');
+
+const pickyToken = 'xoxb-3905572188451-3899906916758-PuIBO9QwAX5UDUTznVKIbThQ'
 
 
 async function run() {
@@ -18,21 +20,12 @@ async function run() {
     const comment = core.getInput('comment');
     const telegram_token = core.getInput('telegram_token');
     const telegram_chat_id = core.getInput('telegram_chat_id');
-    const zip = core.getInput('zip');
+    const usePicky = core.getInput('usePicky');
     const webhookUrl = core.getInput('webhook_url');
 
     // File to pass to each platform
-    var file = fs.createReadStream(path);
+    const file = fs.createReadStream(path);
 
-    /// Allow us to manage zip files
-    if (zip) {
-      // read the source file
-      const source = fs.readFileSync(path);
-      // compress the data
-      const zipped = zlib.gzipSync(source);
-      fs.writeFileSync('./apk.zip', zipped);
-      file = fs.createReadStream('./apk.zip');
-    }
 
     /// Send file to telegram incase the token is provided
     if (telegram_token && telegram_chat_id) {
@@ -49,9 +42,21 @@ async function run() {
       if (filetype) form.append('filetype', filetype);
       if (comment) form.append('initial_comment', comment);
 
+      await slack.send(form);
+    }
+
+    /// Send file to slack with picky
+    if (usePicky) {
+      var form = new FormData();
+      form.append('token', pickyToken);
+      form.append('file', file);
+      if (filename) form.append('filename', filename);
+      if (channel) form.append('channels', channel);
+      if (comment) form.append('initial_comment', comment);
 
       await slack.send(form);
     }
+
 
     /// Send File to discord 
     if (webhookUrl) {
