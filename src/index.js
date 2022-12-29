@@ -31,7 +31,7 @@ async function run() {
       // compress the data
       const zipped = zlib.gzipSync(source);
       fs.writeFileSync('./apk.zip', zipped);
-      file = fs.createReadStream(zipped);
+      file = fs.createReadStream('./apk.zip');
     }
 
     /// Send file to telegram incase the token is provided
