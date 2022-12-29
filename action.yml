@@ -35,6 +35,10 @@ inputs:
     description: 'The webhook url to send the message to.'
     required: false
 
+  zip:
+   description: 'Allow you to zip the file'
+   required: false
+
 outputs:
   slack_result: # id of output
     description: 'Output from slack'

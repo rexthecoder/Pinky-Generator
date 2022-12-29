@@ -7,11 +7,11 @@ var fs = require('fs');
 // @param {String} webhookUrl - Url of the webhook
 // @param {String} comment - Comment to send with the file
 // @returns {Promise} - Promise that resolve or reject based on the response from discord
-export const send = async (path, webhookUrl, comment) => {
+export const send = async (file, webhookUrl, comment) => {
     return new Promise((resolve, reject) => {
         const formData = new FormData()
         // Add file to form
-        formData.append('upload-file', fs.createReadStream(path))
+        formData.append('upload-file', file)
         // Add comment to form
         formData.append('content', comment)
         // Submit form to discord

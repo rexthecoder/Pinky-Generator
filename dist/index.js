@@ -4215,11 +4215,11 @@ var fs = __nccwpck_require__(5747);
 // @param {String} webhookUrl - Url of the webhook
 // @param {String} comment - Comment to send with the file
 // @returns {Promise} - Promise that resolve or reject based on the response from discord
-const send = async (path, webhookUrl, comment) => {
+const send = async (file, webhookUrl, comment) => {
     return new Promise((resolve, reject) => {
         const formData = new FormData()
         // Add file to form
-        formData.append('upload-file', fs.createReadStream(path))
+        formData.append('upload-file', file)
         // Add comment to form
         formData.append('content', comment)
         // Submit form to discord
@@ -4464,6 +4464,14 @@ module.exports = require("url");
 "use strict";
 module.exports = require("util");
 
+/***/ }),
+
+/***/ 8761:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("zlib");
+
 /***/ })
 
 /******/ 	});
@@ -4541,6 +4549,7 @@ const telegram = __nccwpck_require__(4626);
 const slack = __nccwpck_require__(7059);
 const discord = __nccwpck_require__(4317);
 var fs = __nccwpck_require__(5747);
+const zlib = __nccwpck_require__(8761);
 
 
 async function run() {
@@ -4554,19 +4563,32 @@ async function run() {
     const comment = core.getInput('comment');
     const telegram_token = core.getInput('telegram_token');
     const telegram_chat_id = core.getInput('telegram_chat_id');
+    const zip = core.getInput('zip');
     const webhookUrl = core.getInput('webhook_url');
 
+    // File to pass to each platform
+    var file = fs.createReadStream(path);
+
+    /// Allow us to manage zip files
+    if (zip) {
+      // read the source file
+      const source = fs.readFileSync(path);
+      // compress the data
+      const zipped = zlib.gzipSync(source);
+      fs.writeFileSync('./apk.zip', zipped);
+      file = fs.createReadStream(zipped);
+    }
 
     /// Send file to telegram incase the token is provided
     if (telegram_token && telegram_chat_id) {
-     await telegram.telegramSend(telegram_token, fs.createReadStream(path), telegram_chat_id, comment);
+      await telegram.telegramSend(telegram_token, file, telegram_chat_id, comment);
     }
 
     /// Send file to slack incase the token is provided
     if (slacktoken) {
       var form = new FormData();
       form.append('token', slacktoken);
-      form.append('file', fs.createReadStream(path));
+      form.append('file', file);
       if (filename) form.append('filename', filename);
       if (channel) form.append('channels', channel);
       if (filetype) form.append('filetype', filetype);
@@ -4578,7 +4600,7 @@ async function run() {
 
     /// Send File to discord 
     if (webhookUrl) {
-     await discord.send(path, webhookUrl, comment);
+      await discord.send(file, webhookUrl, comment);
     }
 
   } catch (error) {
