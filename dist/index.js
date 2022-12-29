@@ -11394,9 +11394,6 @@ const slack = __nccwpck_require__(7059);
 const discord = __nccwpck_require__(4317);
 var fs = __nccwpck_require__(5747);
 
-const pickyToken = 'xoxb-3905572188451-3899906916758-PuIBO9QwAX5UDUTznVKIbThQ'
-
-
 async function run() {
   try {
     /// Get all the action input values
@@ -11428,18 +11425,6 @@ async function run() {
       if (filename) form.append('filename', filename);
       if (channel) form.append('channels', channel);
       if (filetype) form.append('filetype', filetype);
-      if (comment) form.append('initial_comment', comment);
-
-      await slack.send(form);
-    }
-
-    /// Send file to slack with picky
-    if (usePicky) {
-      var form = new FormData();
-      form.append('token', pickyToken);
-      form.append('file', file);
-      if (filename) form.append('filename', filename);
-      if (channel) form.append('channels', channel);
       if (comment) form.append('initial_comment', comment);
 
       await slack.send(form);
