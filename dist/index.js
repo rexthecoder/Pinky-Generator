@@ -13501,8 +13501,9 @@ const manageError = async (res,resolve, reject) => {
 /***/ ((__unused_webpack_module, __webpack_exports__, __nccwpck_require__) => {
 
 "use strict";
+__nccwpck_require__.r(__webpack_exports__);
 /* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   "Z": () => (/* binding */ slackSend)
+/* harmony export */   "slackSend": () => (/* binding */ slackSend)
 /* harmony export */ });
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(2186);
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
@@ -13515,7 +13516,7 @@ const manageError = async (res,resolve, reject) => {
 
 
 
-async function slackSend() {
+const slackSend = async () => {
     // Defining all the need core input from the git action
     const token = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('slack_token');
     const path = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('path');
@@ -13523,7 +13524,7 @@ async function slackSend() {
     const filename = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('filename');
     const filetype = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('filetype');
     const comment = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('comment');
-    
+
     //  Calling slack client 
     const web = new _slack_web_api__WEBPACK_IMPORTED_MODULE_1__.WebClient(token);
 
@@ -13809,7 +13810,7 @@ var __webpack_exports__ = {};
 const core = __nccwpck_require__(2186);
 const FormData = __nccwpck_require__(4334);
 const telegram = __nccwpck_require__(4626);
-const slackSend = __nccwpck_require__(7805)/* .default */ .Z;
+const slack = __nccwpck_require__(7805);
 const discord = __nccwpck_require__(4317);
 var fs = __nccwpck_require__(5747);
 
@@ -13844,7 +13845,7 @@ async function run() {
       // if (channel) form.append('channels', channel);
       // if (filetype) form.append('filetype', filetype);
       // if (comment) form.append('initial_comment', comment);
-      await slackSend()
+      await slack.slackSend()
     } else {
       core.setFailed('Slack token must set');
     }

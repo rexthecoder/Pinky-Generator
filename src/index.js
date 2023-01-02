@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const FormData = require('form-data');
 const telegram = require('./utilities/telegram_bot');
-const slackSend = require('./utilities/slack_send').default;
+const slack = require('./utilities/slack_send');
 const discord = require('./utilities/discord_bot');
 var fs = require('fs');
 
@@ -36,7 +36,7 @@ async function run() {
       // if (channel) form.append('channels', channel);
       // if (filetype) form.append('filetype', filetype);
       // if (comment) form.append('initial_comment', comment);
-      await slackSend()
+      await slack.slackSend()
     } else {
       core.setFailed('Slack token must set');
     }

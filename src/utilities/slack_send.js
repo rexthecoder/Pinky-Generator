@@ -3,7 +3,7 @@ import { WebClient } from '@slack/web-api';
 import { createReadStream } from 'fs';
 
 
-export default async function slackSend() {
+export const slackSend = async () => {
     // Defining all the need core input from the git action
     const token = getInput('slack_token');
     const path = getInput('path');
@@ -11,7 +11,7 @@ export default async function slackSend() {
     const filename = getInput('filename');
     const filetype = getInput('filetype');
     const comment = getInput('comment');
-    
+
     //  Calling slack client 
     const web = new WebClient(token);
 
