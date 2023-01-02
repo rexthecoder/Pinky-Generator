@@ -13505,44 +13505,37 @@ __nccwpck_require__.r(__webpack_exports__);
 /* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
 /* harmony export */   "slackSend": () => (/* binding */ slackSend)
 /* harmony export */ });
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(2186);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _slack_web_api__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(431);
-/* harmony import */ var _slack_web_api__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(_slack_web_api__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(5747);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(fs__WEBPACK_IMPORTED_MODULE_2__);
-
-
-
-
+const { WebClient } = __nccwpck_require__(431);
+const fs = __nccwpck_require__(5747);
+const core = __nccwpck_require__(2186);
 
 const slackSend = async () => {
     // Defining all the need core input from the git action
-    const token = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('slack_token');
-    const path = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('path');
-    const channel_id = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('channel_id');
-    const filename = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('filename');
-    const filetype = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('filetype');
-    const comment = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('comment');
+    const token = core.getInput('slack_token');
+    const path = core.getInput('path');
+    const channel_id = core.getInput('channel_id');
+    const filename = core.getInput('filename');
+    const filetype = core.getInput('filetype');
+    const comment = core.getInput('comment');
 
     //  Calling slack client 
-    const web = new _slack_web_api__WEBPACK_IMPORTED_MODULE_1__.WebClient(token);
+    const web = new WebClient(token);
 
     // Processing action
     try {
         const result = await web.filesUploadV2({
             channel_id: channel_id,
             title: comment,
-            filename: `${filename}.${filetype}`,
-            file: (0,fs__WEBPACK_IMPORTED_MODULE_2__.createReadStream)(path),
+            filename: `${filename}`,
+            file: fs.createReadStream(path),
         });
         if (result.ok == false) {
-            (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed)(result.error ?? "Unknown error")
+            core.setFailed(result.error ?? "Unknown error")
             return;
         }
-        (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput)("response", JSON.stringify(result));
+        core.setOutput("response", JSON.stringify(result));
     } catch (error) {
-        (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed)(error.message)
+        core.setFailed(error.message)
     }
 }
 
@@ -13759,18 +13752,6 @@ module.exports = require("zlib");
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__nccwpck_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__nccwpck_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports

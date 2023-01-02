@@ -1,16 +1,15 @@
-import { getInput, setFailed, setOutput } from '@actions/core';
-import { WebClient } from '@slack/web-api';
-import { createReadStream } from 'fs';
-
+const { WebClient } = require('@slack/web-api');
+const fs = require('fs');
+const core = require('@actions/core');
 
 export const slackSend = async () => {
     // Defining all the need core input from the git action
-    const token = getInput('slack_token');
-    const path = getInput('path');
-    const channel_id = getInput('channel_id');
-    const filename = getInput('filename');
-    const filetype = getInput('filetype');
-    const comment = getInput('comment');
+    const token = core.getInput('slack_token');
+    const path = core.getInput('path');
+    const channel_id = core.getInput('channel_id');
+    const filename = core.getInput('filename');
+    const filetype = core.getInput('filetype');
+    const comment = core.getInput('comment');
 
     //  Calling slack client 
     const web = new WebClient(token);
@@ -20,15 +19,15 @@ export const slackSend = async () => {
         const result = await web.filesUploadV2({
             channel_id: channel_id,
             title: comment,
-            filename: `${filename}.${filetype}`,
-            file: createReadStream(path),
+            filename: `${filename}`,
+            file: fs.createReadStream(path),
         });
         if (result.ok == false) {
-            setFailed(result.error ?? "Unknown error")
+            core.setFailed(result.error ?? "Unknown error")
             return;
         }
-        setOutput("response", JSON.stringify(result));
+        core.setOutput("response", JSON.stringify(result));
     } catch (error) {
-        setFailed(error.message)
+        core.setFailed(error.message)
     }
 }
