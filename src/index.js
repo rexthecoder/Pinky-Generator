@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const FormData = require('form-data');
 const telegram = require('./utilities/telegram_bot');
-const slackSend = require('./utilities/slack_send');
+const slackSend = require('./utilities/slack_send').default;
 const discord = require('./utilities/discord_bot');
 var fs = require('fs');
 
@@ -10,7 +10,7 @@ async function run() {
     /// Get all the action input values
     const slacktoken = core.getInput('slack_token');
     const path = core.getInput('path');
-    const channel = core.getInput('channel');
+    //const channel = core.getInput('channel');
     const filename = core.getInput('filename');
     const filetype = core.getInput('filetype');
     const comment = core.getInput('comment');
