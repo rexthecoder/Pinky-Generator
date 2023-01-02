@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const FormData = require('form-data');
 const telegram = require('./utilities/telegram_bot');
-const slack = require('./utilities/slack_bot');
+const slackSend = require('./utilities/slack_send');
 const discord = require('./utilities/discord_bot');
 var fs = require('fs');
 
@@ -29,15 +29,16 @@ async function run() {
 
     /// Send file to slack incase the token is provided
     if (slacktoken) {
-      var form = new FormData();
-      form.append('token', slacktoken);
-      form.append('file', file);
-      if (filename) form.append('filename', filename);
-      if (channel) form.append('channels', channel);
-      if (filetype) form.append('filetype', filetype);
-      if (comment) form.append('initial_comment', comment);
-
-      await slack.send(form);
+      // var form = new FormData();
+      // form.append('token', slacktoken);
+      // form.append('file', file);
+      // if (filename) form.append('filename', filename);
+      // if (channel) form.append('channels', channel);
+      // if (filetype) form.append('filetype', filetype);
+      // if (comment) form.append('initial_comment', comment);
+      await slackSend()
+    } else {
+      core.setFailed('Slack token must set');
     }
 
 
